@@ -9,6 +9,7 @@ services:
     environment:
       APP_ENV: ${APP_ENV:-dev}
       APP_DEBUG: ${APP_DEBUG:-1}
+      APP_VERSION: ${APP_VERSION:-0.1.0}
       TZ: ${TIMEZONE:-Europe/Paris}
       # Messaging
       MESSENGER_TRANSPORT_DSN: amqp://rabbitmq:5672
@@ -39,6 +40,7 @@ services:
     environment:
       APP_ENV: ${APP_ENV:-dev}
       APP_DEBUG: ${APP_DEBUG:-1}
+      APP_VERSION: ${APP_VERSION:-0.1.0}
       TZ: ${TIMEZONE:-Europe/Paris}
       MESSENGER_TRANSPORT_DSN: amqp://rabbitmq:5672
       MONGODB_URI: mongodb://${MONGO_INITDB_ROOT_USERNAME:-admin}:${MONGO_INITDB_ROOT_PASSWORD:-adminpass}@mongodb:27017

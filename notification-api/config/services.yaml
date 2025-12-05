@@ -1,0 +1,43 @@
+parameters:
+  # Défaut d'APP_VERSION si la variable d'environnement est absente
+  env(APP_VERSION): '0.1.0'
+  # Version applicative (liée à l'env, avec fallback ci-dessus)
+  app.version: '%env(APP_VERSION)%'
+  
+  # FCM & Rate Limit
+  env(FCM_API_KEY): 'mock-key'
+  env(RATE_LIMIT_PER_MINUTE): '10'
+  app.fcm_key: '%env(FCM_API_KEY)%'
+  app.rate_limit: '%env(int:RATE_LIMIT_PER_MINUTE)%'
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+    bind:
+      $appVersion: '%app.version%'
+      $fcmApiKey: '%app.fcm_key%'
+      $rateLimit: '%app.rate_limit%'
+
+  # Présentation (HTTP/CLI)
+  NotificationApi\Presentation\:
+    resource: '../src/Presentation/'
+    exclude: []
+
+  # Controllers HTTP doivent être publics ou taggés pour être récupérés par le conteneur
+  NotificationApi\Presentation\Http\:
+    resource: '../src/Presentation/Http/'
+    public: true
+    tags: ['controller.service_arguments']
+
+  # Application layer
+  NotificationApi\Application\:
+    resource: '../src/Application/'
+
+  # Infrastructure
+  NotificationApi\Infrastructure\:
+    resource: '../src/Infrastructure/'
+
+  # Alias Domain Service
+  NotificationApi\Domain\Notification\NotificationServiceInterface: '@NotificationApi\Infrastructure\Notification\NotificationService'
