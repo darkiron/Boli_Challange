@@ -32,14 +32,14 @@ Démarrage rapide (local avec Docker Desktop)
    ```
 
 3) Services exposés
-   - notification-api: http://localhost:${APP_PORT:-8080}
+   - notification-api: http://localhost:${APP_PORT:-8009}
    - MongoDB: localhost:27017
    - mongo-express: http://localhost:8081
    - RabbitMQ (UI): http://localhost:15672 (guest/guest par défaut)
 
 Application Symfony (montage du code)
 - Placez votre projet Symfony dans `./notification-api` (mappé sur `/var/www/html` dans le conteneur).
-- Le `Dockerfile` démarre le serveur PHP intégré sur le port 8080 si un dossier `public/` est présent.
+- Le `Dockerfile` démarre le serveur PHP intégré sur le port 8009 si un dossier `public/` est présent.
 
 Variables d’environnement principales
 - `MONGODB_URI` et `MESSENGER_TRANSPORT_DSN` sont fournis au conteneur. Branchez-les dans la config Symfony (Doctrine ODM / Messenger).
@@ -56,7 +56,9 @@ Fichiers sous `k8s/`:
 - `secrets.example.yaml` — Secrets exemple (copiez en `secrets.yaml`, à ne pas commiter)
 - `mongodb.yaml` — StatefulSet + Service + PVC
 - `rabbitmq.yaml` — Deployment + Service
-- `notification-api-deployment.yaml` — Deployment + Service (ClusterIP)
+- `notification-api-deployment.yaml` — Deployment (2 replicas, probes) + Service (ClusterIP, port 8009)
+- `hpa.yaml` — HorizontalPodAutoscaler (min:2, max:10, CPU 60%)
+- `pdb.yaml` — PodDisruptionBudget (minAvailable: 1)
 - `ingress.example.yaml` — Ingress (optionnel)
 
 1) Appliquer les ressources de base
@@ -77,14 +79,18 @@ Fichiers sous `k8s/`:
 
 3) Construire et déployer l’image `notification-api`
    - Remplacez l’image dans `k8s/notification-api-deployment.yaml` (placeholder: `ghcr.io/example/notification-api:latest`).
-   - Construire et pousser votre image (exemple):
-     ```powershell
-     docker build -t <registry>/<namespace>/notification-api:latest -f Dockerfile .
-     docker push <registry>/<namespace>/notification-api:latest
+   - Construire et pousser votre image (exemple) via le script:
+     ```bash
+     export REGISTRY=<registry>/<namespace>
+     scripts/build-and-push.sh
+     # export IMAGE_REF est affiché à la fin (gardez-le pour deploy.sh)
      ```
    - Appliquer le déploiement :
-     ```powershell
-     kubectl apply -f k8s/notification-api-deployment.yaml
+     ```bash
+     IMAGE_REF=<registry>/<namespace>/notification-api:<tag>
+     NAMESPACE=health-platform scripts/deploy.sh
+     # ou
+     IMAGE_REF="$IMAGE_REF" scripts/deploy.sh
      ```
 
 4) Ingress (optionnel)
@@ -97,6 +103,12 @@ Vérification Kubernetes
 - Pods: `kubectl get pods -n health-platform -o wide`
 - Services: `kubectl get svc -n health-platform`
 - Logs: `kubectl logs -n health-platform deploy/notification-api`
+
+Scripts de monitoring
+- `scripts/monitor.sh` propose des alias utiles pour suivre les pods, ressources et logs en continu.
+
+Docker Compose — workers Messenger
+- Un service `notification-worker` est inclus et lance `messenger:consume` si votre app Symfony est montée dans `./notification-api`.
 
 Sécurité
 - Ne commitez pas de secrets réels. Utilisez `k8s/secrets.example.yaml` comme modèle et gardez `secrets.yaml` hors du VCS.
