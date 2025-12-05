@@ -1,17 +1,13 @@
-# Résultats des tests et Couverture
+# Résultats des Tests
 
-## Synthèse (2025-12-05)
+Date: 2025-12-05 22:06
+Couverture globale (Lignes): 91.36%
 
-- **Tests exécutés**: 5
-- **Assertions**: 25
-- **Résultat**: PASS
+## Détail
+- NotificationApi\Application\Command\SendNotificationCommand: 100%
+- NotificationApi\Infrastructure\Notification\NotificationService: 83.72%
+- NotificationApi\Presentation\Cli\TestNotificationCommand: 100%
+- NotificationApi\Presentation\Http\HealthController: 100%
 
-## Couverture de code (PCOV)
-
-| Type | Couvert | Total | % |
-|---|---|---|---|
-| Classes | 4 | 4 | 100.00% |
-| Méthodes | 7 | 7 | 100.00% |
-| Lignes | 25 | 25 | 100.00% |
-
-Rapport détaillé généré dans `build/coverage/index.html`.
+## Tests
+Total: 11, Passés: 11.

@@ -9,11 +9,11 @@ doctrine_mongodb:
       auto_mapping: true
       database: diabetes
     wellness:
-      auto_mapping: true
+      connection: default
       database: wellness
     maternity:
-      auto_mapping: true
+      connection: default
       database: maternity
     test:
-      auto_mapping: true
+      connection: default
       database: test
