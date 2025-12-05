@@ -3,6 +3,12 @@ parameters:
   env(APP_VERSION): '0.1.0'
   # Version applicative (liée à l'env, avec fallback ci-dessus)
   app.version: '%env(APP_VERSION)%'
+  
+  # FCM & Rate Limit
+  env(FCM_API_KEY): 'mock-key'
+  env(RATE_LIMIT_PER_MINUTE): '10'
+  app.fcm_key: '%env(FCM_API_KEY)%'
+  app.rate_limit: '%env(int:RATE_LIMIT_PER_MINUTE)%'
 
 services:
   _defaults:
@@ -11,6 +17,8 @@ services:
     public: false
     bind:
       $appVersion: '%app.version%'
+      $fcmApiKey: '%app.fcm_key%'
+      $rateLimit: '%app.rate_limit%'
 
   # Présentation (HTTP/CLI)
   NotificationApi\Presentation\:
