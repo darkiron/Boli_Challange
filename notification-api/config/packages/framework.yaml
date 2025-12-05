@@ -1,0 +1,9 @@
+framework:
+  secret: '%env(APP_SECRET)%'
+  http_method_override: true
+  handle_all_throwables: true
+  php_errors:
+    log: true
+  session: ~
+  serializer: { enable_attributes: true }
+  default_locale: 'en'

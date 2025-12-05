@@ -1,0 +1,35 @@
+parameters:
+  # Défaut d'APP_VERSION si la variable d'environnement est absente
+  env(APP_VERSION): '0.1.0'
+  # Version applicative (liée à l'env, avec fallback ci-dessus)
+  app.version: '%env(APP_VERSION)%'
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+    bind:
+      $appVersion: '%app.version%'
+
+  # Présentation (HTTP/CLI)
+  NotificationApi\Presentation\:
+    resource: '../src/Presentation/'
+    exclude: []
+
+  # Controllers HTTP doivent être publics ou taggés pour être récupérés par le conteneur
+  NotificationApi\Presentation\Http\:
+    resource: '../src/Presentation/Http/'
+    public: true
+    tags: ['controller.service_arguments']
+
+  # Application layer
+  NotificationApi\Application\:
+    resource: '../src/Application/'
+
+  # Infrastructure
+  NotificationApi\Infrastructure\:
+    resource: '../src/Infrastructure/'
+
+  # Alias Domain Service
+  NotificationApi\Domain\Notification\NotificationServiceInterface: '@NotificationApi\Infrastructure\Notification\NotificationService'

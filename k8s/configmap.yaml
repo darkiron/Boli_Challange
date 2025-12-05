@@ -6,6 +6,7 @@ metadata:
 data:
   APP_ENV: "dev"
   APP_DEBUG: "1"
+  APP_VERSION: "0.1.0"
   TIMEZONE: "Europe/Paris"
   # DSNs
   MESSENGER_TRANSPORT_DSN: "amqp://rabbitmq:5672"

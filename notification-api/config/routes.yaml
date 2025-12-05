@@ -1,0 +1,7 @@
+health:
+  path: /health
+  controller: NotificationApi\Presentation\Http\HealthController::index
+
+home:
+  path: /
+  controller: NotificationApi\Presentation\Http\HealthController::index

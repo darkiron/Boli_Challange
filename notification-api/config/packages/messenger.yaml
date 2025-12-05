@@ -1,0 +1,9 @@
+framework:
+  messenger:
+    failure_transport: failed
+    transports:
+      notifications: '%env(MESSENGER_TRANSPORT_DSN)%'
+      services: '%env(MESSENGER_TRANSPORT_DSN)%'
+      failed: 'in-memory://'
+    routing:
+      NotificationApi\Application\Command\SendNotificationCommand: notifications
