@@ -1,0 +1,19 @@
+doctrine_mongodb:
+  auto_generate_proxy_classes: true
+  connections:
+    default:
+      server: '%env(MONGODB_URI)%'
+  default_database: diabetes
+  document_managers:
+    default:
+      auto_mapping: true
+      database: diabetes
+    wellness:
+      connection: default
+      database: wellness
+    maternity:
+      connection: default
+      database: maternity
+    test:
+      connection: default
+      database: test

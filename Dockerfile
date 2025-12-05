@@ -21,6 +21,11 @@ RUN set -eux; \
         $PHPIZE_DEPS; \
     docker-php-ext-configure zip; \
     docker-php-ext-install -j"$(nproc)" intl mbstring zip; \
+    pecl install mongodb; \
+    docker-php-ext-enable mongodb; \
+    pecl install pcov; \
+    docker-php-ext-enable pcov; \
+    printf "pcov.enabled=1\npcov.directory=/var/www/html/src\n" > /usr/local/etc/php/conf.d/pcov.ini; \
     cp "/usr/share/zoneinfo/${TZ}" /etc/localtime; \
     echo "${TZ}" > /etc/timezone; \
     apk del --no-cache $PHPIZE_DEPS
@@ -49,9 +54,9 @@ EXPOSE 8009
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
   CMD sh -lc 'curl -fsS http://127.0.0.1:8009/health || exit 1'
 
-# Commande par défaut : démarrer le serveur PHP si public/ existe, sinon attendre
+# Commande par défaut : démarrer le serveur PHP avec un routeur pour Symfony, sinon attendre
 CMD if [ -d "public" ]; then \
-      php -S 0.0.0.0:8009 -t public; \
+      php -S 0.0.0.0:8009 -t public public/index.php; \
     else \
       echo "Aucune application Symfony montée dans /var/www/html. Montez votre dossier (ex: ./notification-api) pour développer."; \
       sleep 3600; \

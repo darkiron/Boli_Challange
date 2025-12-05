@@ -1,0 +1,22 @@
+framework:
+  messenger:
+    failure_transport: failed
+    transports:
+      notifications:
+        dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+        options:
+          exchange:
+            name: notification-api
+            type: topic
+          queues:
+            notifications:
+              binding_keys: ['notification.#']
+      services:
+        dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+        options:
+          exchange:
+            name: services
+            type: fanout
+      failed: 'in-memory://'
+    routing:
+      NotificationApi\Application\Command\SendNotificationCommand: notifications

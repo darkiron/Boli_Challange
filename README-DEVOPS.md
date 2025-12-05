@@ -115,3 +115,58 @@ Sécurité
 
 FAQ
 - Pourquoi plus de dossier `docker/` ? Nous standardisons sur Docker Desktop avec `compose.yaml` à la racine pour simplifier les chemins et l’onboarding. La séparation n’apporte pas de valeur ici.
+
+Dépan nage / Problèmes fréquents
+
+- Page vide sur http://localhost:8009/ ou http://localhost:8009/public
+  - Cause probable: le serveur PHP intégré n’utilisait pas de routeur Symfony, les URLs ne passaient pas par `public/index.php`.
+  - Correctif: le Dockerfile a été mis à jour pour lancer `php -S 0.0.0.0:8009 -t public public/index.php`.
+  - Que faire: reconstruisez et redémarrez le service.
+    ```powershell
+    docker compose up -d --build notification-api
+    docker compose logs -f notification-api
+    ```
+  - Testez: `http://localhost:8009/health` (JSON OK) et `http://localhost:8009/`.
+
+- Erreur Symfony: « The controller for URI "/" is not callable… controller … is private »
+  - Cause: par défaut nos contrôleurs n’étaient pas publics/taggés.
+  - Correctif appliqué dans `notification-api/config/services.yaml`:
+    ```yaml
+    services:
+      NotificationApi\Presentation\Http\:
+        resource: '../src/Presentation/Http/'
+        public: true
+        tags: ['controller.service_arguments']
+    ```
+  - Que faire: vider le cache/recharger (en dev, le changement est pris en compte automatiquement). Si besoin:
+    ```powershell
+    docker compose run --rm -w /var/www/html notification-api php bin/console cache:clear
+    docker compose restart notification-api
+    ```
+
+- Healthcheck en échec au démarrage
+  - Vérifiez les logs de `notification-api` et que votre code Symfony est bien monté dans `./notification-api` avec un dossier `public/`.
+  - Vérifiez que le port n’est pas déjà utilisé et que `APP_PORT` dans `.env` correspond bien à `compose.yaml` (8009 par défaut).
+
+- Composer / vendor manquant dans le conteneur
+  - Installez les dépendances dans le conteneur (le volume persiste):
+    ```powershell
+    docker compose run --rm -w /var/www/html notification-api composer install -n --prefer-dist
+    ```
+  - Vérifiez ensuite la console Symfony:
+    ```powershell
+    docker compose run --rm -w /var/www/html notification-api php bin/console about
+    ```
+
+- Erreur Symfony: « Environment variable not found: APP_VERSION »
+  - Cause: la variable `APP_VERSION` n’est pas fournie au conteneur et `.env` n’est pas chargé (ou absent). Nous avons ajouté un repli sécurisé et la variable dans l’infra.
+  - Correctifs intégrés:
+    - `notification-api/config/services.yaml` utilise maintenant un défaut: `app.version: "%env(default:0.1.0:APP_VERSION)%"`.
+    - `compose.yaml` passe `APP_VERSION: ${APP_VERSION:-0.1.0}` aux services `notification-api` et `notification-worker`.
+    - `k8s/configmap.yaml` expose `APP_VERSION: "0.1.0"` (à ajuster selon vos releases).
+    - `.env.example` ajoute `APP_VERSION=0.1.0`.
+  - Que faire: reconstruire et redémarrer l’app.
+    ```powershell
+    docker compose up -d --build notification-api
+    curl -fsS http://localhost:8009/health
+    ```
