@@ -1,0 +1,10 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: notification-api
+  namespace: health-platform
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: notification-api
