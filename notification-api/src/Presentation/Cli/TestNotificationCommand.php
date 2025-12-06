@@ -17,7 +17,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class TestNotificationCommand extends Command
 {
-    private $notificationService;
+    private NotificationServiceInterface $notificationService;
 
     public function __construct(NotificationServiceInterface $notificationService)
     {

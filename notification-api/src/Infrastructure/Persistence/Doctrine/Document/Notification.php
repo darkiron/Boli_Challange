@@ -26,6 +26,7 @@ class Notification
     #[ODM\Field(type: 'string')]
     private string $body;
 
+    /** @var array<string, mixed> */
     #[ODM\Field(type: 'hash')]
     private array $data = [];
 
@@ -44,6 +45,9 @@ class Notification
     #[ODM\Field(type: 'date', nullable: true)]
     private ?\DateTimeInterface $readAt = null;
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public function __construct(
         string $userId,
         string $type,
@@ -86,11 +90,17 @@ class Notification
         return $this->body;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getData(): array
     {
         return $this->data;
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public function setData(array $data): self
     {
         $this->data = $data;

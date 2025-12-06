@@ -6,14 +6,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class HealthController
 {
-    private $appVersion;
+    private string $appVersion;
 
-    public function __construct($appVersion)
+    public function __construct(string $appVersion)
     {
         $this->appVersion = $appVersion;
     }
 
-    public function index()
+    public function index(): JsonResponse
     {
         return new JsonResponse([
             'status' => 'ok',

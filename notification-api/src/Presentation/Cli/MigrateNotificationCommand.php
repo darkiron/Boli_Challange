@@ -19,8 +19,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class MigrateNotificationCommand extends Command
 {
-    private $registry;
-    private $logger;
+    private ManagerRegistry $registry;
+    private LoggerInterface $logger;
 
     public function __construct(ManagerRegistry $registry, LoggerInterface $logger)
     {
@@ -56,6 +56,9 @@ class MigrateNotificationCommand extends Command
             }
 
             $repo = $dm->getRepository(Notification::class);
+            if (!$repo instanceof \NotificationApi\Infrastructure\Persistence\Doctrine\Repository\NotificationRepository) {
+                 throw new \RuntimeException("Invalid repository class");
+            }
 
             // We process all notifications to ensure consistency
             $total = $repo->countAll();
@@ -77,10 +80,12 @@ class MigrateNotificationCommand extends Command
             // Attempt to start a session for transactions if supported
             $session = null;
             try {
-                $client = $dm->getClient();
-                // startSession might fail on standalone servers
-                $session = $client->startSession();
-                $session->startTransaction();
+                if ($dm instanceof \Doctrine\ODM\MongoDB\DocumentManager) {
+                    $client = $dm->getClient();
+                    // startSession might fail on standalone servers
+                    $session = $client->startSession();
+                    $session->startTransaction();
+                }
             } catch (\Throwable $e) {
                 $session = null; // Transactions not supported or failed
             }
