@@ -1,22 +1,48 @@
 framework:
-  messenger:
-    failure_transport: failed
-    transports:
-      notifications:
-        dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
-        options:
-          exchange:
-            name: notification-api
-            type: topic
-          queues:
+    messenger:
+        failure_transport: failed
+
+        transports:
             notifications:
-              binding_keys: ['notification.#']
-      services:
-        dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
-        options:
-          exchange:
-            name: services
-            type: fanout
-      failed: 'in-memory://'
-    routing:
-      NotificationApi\Application\Command\SendNotificationCommand: notifications
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                options:
+                    exchange:
+                        name: notification-api
+                        type: topic
+                    queues:
+                        notifications:
+                            binding_keys: ['notification.#']
+                retry_strategy:
+                    max_retries: 3
+                    delay: 2000
+                    multiplier: 2
+
+            services:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                options:
+                    exchange:
+                        name: services
+                        type: fanout
+                    queues:
+                        services:
+                            binding_keys: ['#']
+
+            failed:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                options:
+                    exchange:
+                        name: failed_exchange
+                        type: direct
+                    queues:
+                        failed:
+                            binding_keys: ['failed']
+
+        routing:
+            'NotificationApi\Application\Message\SendNotificationMessage': notifications
+            'NotificationApi\Application\Message\BulkNotificationMessage': notifications
+            'NotificationApi\Application\Message\NotificationStatusUpdateMessage': services
+
+        buses:
+            messenger.bus.default:
+                middleware:
+                    - 'NotificationApi\Infrastructure\Messenger\Middleware\NotificationMetricsMiddleware'
