@@ -18,6 +18,7 @@ RUN set -eux; \
         zlib-dev \
         oniguruma-dev \
         curl \
+        openssl-dev \
         $PHPIZE_DEPS; \
     docker-php-ext-configure zip; \
     docker-php-ext-install -j"$(nproc)" intl mbstring zip; \
