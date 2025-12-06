@@ -1,8 +1,8 @@
 parameters:
   # Défaut d'APP_VERSION si la variable d'environnement est absente
-  env(APP_VERSION): '0.1.0'
+  app.default_version: '0.1.0'
   # Version applicative (liée à l'env, avec fallback ci-dessus)
-  app.version: '%env(APP_VERSION)%'
+  app.version: '%env(default:app.default_version:APP_VERSION)%'
   
   # FCM & Rate Limit
   env(FCM_API_KEY): 'mock-key'

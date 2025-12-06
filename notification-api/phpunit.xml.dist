@@ -29,5 +29,6 @@
         <env name="APP_ENV" value="test"/>
         <env name="APP_DEBUG" value="0"/>
         <env name="APP_VERSION" value="0.1.0"/>
+        <env name="KERNEL_CLASS" value="NotificationApi\Kernel"/>
     </php>
 </phpunit>

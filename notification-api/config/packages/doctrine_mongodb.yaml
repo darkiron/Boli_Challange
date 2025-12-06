@@ -7,13 +7,37 @@ doctrine_mongodb:
   document_managers:
     default:
       auto_mapping: true
+      mappings:
+        NotificationApi:
+          is_bundle: false
+          dir: '%kernel.project_dir%/src/Infrastructure/Persistence/Doctrine/Document'
+          prefix: 'NotificationApi\Infrastructure\Persistence\Doctrine\Document'
+          alias: NotificationApi
       database: diabetes
     wellness:
       connection: default
       database: wellness
+      mappings:
+        NotificationApi:
+          is_bundle: false
+          dir: '%kernel.project_dir%/src/Infrastructure/Persistence/Doctrine/Document'
+          prefix: 'NotificationApi\Infrastructure\Persistence\Doctrine\Document'
+          alias: NotificationApi
     maternity:
       connection: default
       database: maternity
+      mappings:
+        NotificationApi:
+          is_bundle: false
+          dir: '%kernel.project_dir%/src/Infrastructure/Persistence/Doctrine/Document'
+          prefix: 'NotificationApi\Infrastructure\Persistence\Doctrine\Document'
+          alias: NotificationApi
     test:
       connection: default
       database: test
+      mappings:
+        NotificationApi:
+          is_bundle: false
+          dir: '%kernel.project_dir%/src/Infrastructure/Persistence/Doctrine/Document'
+          prefix: 'NotificationApi\Infrastructure\Persistence\Doctrine\Document'
+          alias: NotificationApi
