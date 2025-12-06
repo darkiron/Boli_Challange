@@ -15,10 +15,10 @@ class HealthController
 
     public function index()
     {
-        return new JsonResponse(array(
+        return new JsonResponse([
             'status' => 'ok',
             'timestamp' => (new \DateTimeImmutable())->format(DATE_ATOM),
             'version' => $this->appVersion,
-        ));
+        ]);
     }
 }

@@ -10,6 +10,7 @@ class SendNotificationMessage
         public readonly string $title,
         public readonly string $body,
         public readonly array $data,
-        public readonly string $serviceName
-    ) {}
+        public readonly string $serviceName,
+    ) {
+    }
 }

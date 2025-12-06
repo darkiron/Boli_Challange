@@ -16,11 +16,11 @@ class SendNotificationHandlerTest extends TestCase
         $logger = $this->createMock(LoggerInterface::class);
         $handler = new SendNotificationHandler($service, $logger);
 
-        $message = new SendNotificationMessage('u1', 'alert', 'Title', 'Body', ['k'=>'v'], 'srv');
-        
+        $message = new SendNotificationMessage('u1', 'alert', 'Title', 'Body', ['k' => 'v'], 'srv');
+
         $service->expects($this->once())
             ->method('send')
-            ->with('u1', 'alert', ['title'=>'Title', 'body'=>'Body', 'serviceName'=>'srv', 'k'=>'v'])
+            ->with('u1', 'alert', ['title' => 'Title', 'body' => 'Body', 'serviceName' => 'srv', 'k' => 'v'])
             ->willReturn(true);
 
         $handler($message);
@@ -33,7 +33,7 @@ class SendNotificationHandlerTest extends TestCase
         $handler = new SendNotificationHandler($service, $logger);
 
         $message = new SendNotificationMessage('u1', 'alert', 'Title', 'Body', [], 'srv');
-        
+
         $service->expects($this->once())
             ->method('send')
             ->willReturn(false);

@@ -77,7 +77,7 @@ class NotificationServiceTest extends TestCase
             ->willReturn($response);
 
         $service = new NotificationService($this->httpClient, $this->cache, $this->logger, 'key', 10);
-        
+
         $this->logger->expects($this->once())->method('error')->with('FCM failed', $this->anything());
         $this->assertFalse($service->send('user-1', 'alert'));
     }
@@ -87,15 +87,15 @@ class NotificationServiceTest extends TestCase
         $item = $this->createMock(CacheItemInterface::class);
         $item->method('isHit')->willReturn($isHit);
         $item->method('get')->willReturn($currentCount);
-        
+
         // Expect save only if allowed
         if ($isHit && $currentCount >= 10) {
-             // No save if limit exceeded (or maybe yes if we want to update timestamp? Implementation returns early)
+            // No save if limit exceeded (or maybe yes if we want to update timestamp? Implementation returns early)
         } else {
-             // Implementation calls save in both init and increment cases
-             $this->cache->method('save')->with($item);
+            // Implementation calls save in both init and increment cases
+            $this->cache->method('save')->with($item);
         }
 
-        $this->cache->method('getItem')->with('ratelimit_' . $userId)->willReturn($item);
+        $this->cache->method('getItem')->with('ratelimit_'.$userId)->willReturn($item);
     }
 }

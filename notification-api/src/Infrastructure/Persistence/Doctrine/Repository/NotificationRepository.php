@@ -39,6 +39,7 @@ class NotificationRepository extends ServiceDocumentRepository
             ->count('count');
 
         $result = $builder->getAggregation()->getIterator()->current();
+
         return $result['count'] ?? 0;
     }
 
@@ -50,7 +51,7 @@ class NotificationRepository extends ServiceDocumentRepository
                 ->field('serviceName')->equals($serviceName)
                 ->field('createdAt')->gte($startDate)
                 ->field('createdAt')->lte($endDate);
-        
+
         // Calculate duration (sentAt - createdAt) only if sentAt is present
         $builder->project()
             ->includeFields(['type', 'status', 'createdAt', 'sentAt'])
@@ -74,35 +75,35 @@ class NotificationRepository extends ServiceDocumentRepository
             ->field('avgProcessingTime')->avg('$duration');
 
         $result = $builder->getAggregation()->getIterator()->current();
-        
+
         if (!$result) {
             return [
                 'total' => 0,
                 'byType' => ['alert' => 0, 'reminder' => 0, 'info' => 0],
                 'byStatus' => ['pending' => 0, 'sent' => 0, 'failed' => 0],
                 'successRate' => 0,
-                'avgProcessingTime' => 0
+                'avgProcessingTime' => 0,
             ];
         }
-        
+
         $total = $result['total'];
         $sent = $result['sent'];
         $successRate = $total > 0 ? ($sent / $total) * 100 : 0;
-        
+
         return [
             'total' => $total,
             'byType' => [
-                'alert' => $result['alertCount'], 
-                'reminder' => $result['reminderCount'], 
-                'info' => $result['infoCount']
+                'alert' => $result['alertCount'],
+                'reminder' => $result['reminderCount'],
+                'info' => $result['infoCount'],
             ],
             'byStatus' => [
-                'pending' => $result['pending'], 
-                'sent' => $result['sent'], 
-                'failed' => $result['failed']
+                'pending' => $result['pending'],
+                'sent' => $result['sent'],
+                'failed' => $result['failed'],
             ],
             'successRate' => round($successRate, 2),
-            'avgProcessingTime' => $result['avgProcessingTime']
+            'avgProcessingTime' => $result['avgProcessingTime'],
         ];
     }
 
@@ -110,7 +111,7 @@ class NotificationRepository extends ServiceDocumentRepository
     {
         $date = new \DateTime();
         $date->modify("-{$hours} hours");
-        
+
         return $this->createQueryBuilder()
             ->field('status')->equals('failed')
             ->field('createdAt')->lte($date)

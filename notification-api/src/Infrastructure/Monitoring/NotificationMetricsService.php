@@ -9,17 +9,19 @@ class NotificationMetricsService
     private int $processed = 0;
     private int $failed = 0;
 
-    public function __construct(private LoggerInterface $logger) {}
+    public function __construct(private LoggerInterface $logger)
+    {
+    }
 
     public function incrementProcessed(): void
     {
-        $this->processed++;
+        ++$this->processed;
         $this->logMetrics();
     }
 
     public function incrementFailed(): void
     {
-        $this->failed++;
+        ++$this->failed;
         $this->logMetrics();
     }
 

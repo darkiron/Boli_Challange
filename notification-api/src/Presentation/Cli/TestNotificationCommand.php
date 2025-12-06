@@ -43,17 +43,19 @@ class TestNotificationCommand extends Command
         $io->title('Sending Test Notification');
         $io->text("User: $userId");
         $io->text("Type: $type");
-        $io->text("Mode: " . ($dryRun ? 'Dry Run' : 'Real Send'));
+        $io->text('Mode: '.($dryRun ? 'Dry Run' : 'Real Send'));
 
-        $payload = array('message' => 'This is a test notification from CLI');
+        $payload = ['message' => 'This is a test notification from CLI'];
 
-        $success = $this->notificationService->send($userId, $type, $payload, (bool)$dryRun);
+        $success = $this->notificationService->send($userId, $type, $payload, (bool) $dryRun);
 
         if ($success) {
             $io->success('Notification sent successfully.');
+
             return Command::SUCCESS;
         } else {
             $io->error('Failed to send notification. Check logs.');
+
             return Command::FAILURE;
         }
     }
