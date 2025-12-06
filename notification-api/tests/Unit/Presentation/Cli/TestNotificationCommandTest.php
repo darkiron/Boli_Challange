@@ -20,11 +20,11 @@ class TestNotificationCommandTest extends TestCase
 
         $command = new TestNotificationCommand($service);
         $commandTester = new CommandTester($command);
-        
-        $code = $commandTester->execute(array(
+
+        $code = $commandTester->execute([
             'userId' => 'user-1',
             'type' => 'alert',
-        ));
+        ]);
 
         $this->assertSame(Command::SUCCESS, $code);
         $this->assertStringContainsString('Notification sent successfully', $commandTester->getDisplay());
@@ -39,11 +39,11 @@ class TestNotificationCommandTest extends TestCase
 
         $command = new TestNotificationCommand($service);
         $commandTester = new CommandTester($command);
-        
-        $code = $commandTester->execute(array(
+
+        $code = $commandTester->execute([
             'userId' => 'user-1',
             'type' => 'alert',
-        ));
+        ]);
 
         $this->assertSame(Command::FAILURE, $code);
         $this->assertStringContainsString('Failed to send', $commandTester->getDisplay());
@@ -59,13 +59,13 @@ class TestNotificationCommandTest extends TestCase
 
         $command = new TestNotificationCommand($service);
         $commandTester = new CommandTester($command);
-        
-        $commandTester->execute(array(
+
+        $commandTester->execute([
             'userId' => 'user-1',
             'type' => 'alert',
             '--dry-run' => true,
-        ));
-        
+        ]);
+
         $this->assertStringContainsString('Mode: Dry Run', $commandTester->getDisplay());
     }
 }

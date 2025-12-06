@@ -9,18 +9,18 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class NotificationService implements NotificationServiceInterface
 {
-    private $httpClient;
-    private $cache;
-    private $logger;
-    private $fcmApiKey;
-    private $rateLimit;
+    private HttpClientInterface $httpClient;
+    private CacheItemPoolInterface $cache;
+    private LoggerInterface $logger;
+    private string $fcmApiKey;
+    private int $rateLimit;
 
     public function __construct(
         HttpClientInterface $httpClient,
         CacheItemPoolInterface $cache,
         LoggerInterface $logger,
         string $fcmApiKey,
-        int $rateLimit
+        int $rateLimit,
     ) {
         $this->httpClient = $httpClient;
         $this->cache = $cache;
@@ -29,54 +29,60 @@ class NotificationService implements NotificationServiceInterface
         $this->rateLimit = $rateLimit;
     }
 
-    public function send($userId, $type, array $payload = array(), $dryRun = false)
+    public function send(string $userId, string $type, array $payload = [], bool $dryRun = false): bool
     {
         if (!$this->checkRateLimit($userId)) {
-            $this->logger->warning('Rate limit exceeded', array('userId' => $userId));
+            $this->logger->warning('Rate limit exceeded', ['userId' => $userId]);
+
             return false;
         }
 
         if ($dryRun) {
-            $this->logger->info('Dry-run notification', array('userId' => $userId, 'type' => $type));
+            $this->logger->info('Dry-run notification', ['userId' => $userId, 'type' => $type]);
+
             return true;
         }
 
         try {
-            $response = $this->httpClient->request('POST', 'https://fcm.googleapis.com/fcm/send', array(
-                'headers' => array(
-                    'Authorization' => 'key=' . $this->fcmApiKey,
+            $response = $this->httpClient->request('POST', 'https://fcm.googleapis.com/fcm/send', [
+                'headers' => [
+                    'Authorization' => 'key='.$this->fcmApiKey,
                     'Content-Type' => 'application/json',
-                ),
-                'json' => array(
-                    'to' => '/topics/user-' . $userId,
-                    'data' => array_merge(array('type' => $type), $payload),
-                ),
-            ));
+                ],
+                'json' => [
+                    'to' => '/topics/user-'.$userId,
+                    'data' => array_merge(['type' => $type], $payload),
+                ],
+            ]);
 
             $statusCode = $response->getStatusCode();
 
             if ($statusCode >= 200 && $statusCode < 300) {
-                $this->logger->info('Notification sent to FCM', array('userId' => $userId, 'status' => $statusCode));
+                $this->logger->info('Notification sent to FCM', ['userId' => $userId, 'status' => $statusCode]);
+
                 return true;
             }
 
-            $this->logger->error('FCM failed', array('status' => $statusCode, 'content' => $response->getContent(false)));
+            $this->logger->error('FCM failed', ['status' => $statusCode, 'content' => $response->getContent(false)]);
+
             return false;
         } catch (\Throwable $e) {
-            $this->logger->error('FCM exception', array('error' => $e->getMessage()));
+            $this->logger->error('FCM exception', ['error' => $e->getMessage()]);
+
             return false;
         }
     }
 
     private function checkRateLimit(string $userId): bool
     {
-        $key = 'ratelimit_' . $userId;
+        $key = 'ratelimit_'.$userId;
         $item = $this->cache->getItem($key);
 
         if (!$item->isHit()) {
             $item->set(1);
             $item->expiresAfter(60);
             $this->cache->save($item);
+
             return true;
         }
 
@@ -87,6 +93,7 @@ class NotificationService implements NotificationServiceInterface
 
         $item->set($count + 1);
         $this->cache->save($item);
+
         return true;
     }
 }

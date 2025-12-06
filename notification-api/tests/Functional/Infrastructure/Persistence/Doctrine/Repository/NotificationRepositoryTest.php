@@ -53,10 +53,10 @@ class NotificationRepositoryTest extends KernelTestCase
     {
         $notif1 = new Notification('user1', 'alert', 'T1', 'B1', 'diabetes');
         $notif1->setStatus('sent');
-        
+
         $notif2 = new Notification('user2', 'alert', 'T2', 'B2', 'diabetes');
         $notif2->setStatus('pending');
-        
+
         $notif3 = new Notification('user3', 'alert', 'T3', 'B3', 'wellness');
         $notif3->setStatus('sent');
 
@@ -68,39 +68,39 @@ class NotificationRepositoryTest extends KernelTestCase
         $count = $this->repository->countByStatusAndService('sent', 'diabetes', new \DateTime('-1 day'), new \DateTime('+1 day'));
         $this->assertSame(1, $count);
     }
-    
+
     public function testGetStatisticsByService(): void
     {
         $notif1 = new Notification('u1', 'alert', 'T1', 'B1', 'diabetes');
         $notif1->setStatus('sent');
-        
+
         // Set sentAt strictly after createdAt
         // createdAt is now. sentAt = now + 1s
-        $createdAt = $notif1->getCreatedAt(); 
+        $createdAt = $notif1->getCreatedAt();
         // Since createdAt is immutable and set in constructor, we can assume it's roughly now.
         // But to be safe for stats avg calculation test, let's set sentAt 1s after.
         // Or we can modify createdAt to be in past.
-        
+
         $ref = new \ReflectionClass($notif1);
         $prop = $ref->getProperty('createdAt');
         $prop->setAccessible(true);
         $startTime = new \DateTimeImmutable('-10 seconds');
         $prop->setValue($notif1, $startTime);
-        
+
         $notif1->setSentAt($startTime->modify('+5 seconds')); // 5s duration
 
         $notif2 = new Notification('u2', 'reminder', 'T2', 'B2', 'diabetes');
         $notif2->setStatus('failed');
-        
+
         $notif3 = new Notification('u3', 'info', 'T3', 'B3', 'wellness');
-        
+
         $this->dm->persist($notif1);
         $this->dm->persist($notif2);
         $this->dm->persist($notif3);
         $this->dm->flush();
-        
+
         $stats = $this->repository->getStatisticsByService('diabetes', new \DateTime('-1 hour'), new \DateTime('+1 hour'));
-        
+
         $this->assertSame(2, $stats['total']);
         $this->assertSame(1, $stats['byStatus']['sent']);
         $this->assertSame(1, $stats['byStatus']['failed']);
@@ -109,26 +109,26 @@ class NotificationRepositoryTest extends KernelTestCase
         $this->assertEquals(50.0, $stats['successRate']);
         $this->assertEquals(5000, $stats['avgProcessingTime'], 'Avg processing time should be ~5000ms');
     }
-    
+
     public function testFindFailedNotificationsOlderThan(): void
     {
         $oldFailed = new Notification('u1', 'alert', 'T1', 'B1', 'diabetes');
         $oldFailed->setStatus('failed');
-        
+
         $ref = new \ReflectionClass($oldFailed);
         $prop = $ref->getProperty('createdAt');
         $prop->setAccessible(true);
         $prop->setValue($oldFailed, new \DateTimeImmutable('-25 hours'));
-        
+
         $recentFailed = new Notification('u2', 'alert', 'T2', 'B2', 'diabetes');
         $recentFailed->setStatus('failed'); // Recent
-        
+
         $this->dm->persist($oldFailed);
         $this->dm->persist($recentFailed);
         $this->dm->flush();
-        
+
         $results = $this->repository->findFailedNotificationsOlderThan(24);
-        
+
         $this->assertCount(1, $results);
         $this->assertSame('T1', $results[0]->getTitle());
     }

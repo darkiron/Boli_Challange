@@ -45,7 +45,7 @@ class NotificationTest extends TestCase
         $readAt = new \DateTime();
         $notification->setReadAt($readAt);
         $this->assertEquals($readAt, $notification->getReadAt());
-        
+
         // Test ReadAt null
         $notification->setReadAt(null);
         $this->assertNull($notification->getReadAt());

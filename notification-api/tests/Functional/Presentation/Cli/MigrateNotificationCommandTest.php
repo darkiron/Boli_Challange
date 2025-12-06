@@ -22,7 +22,7 @@ class MigrateNotificationCommandTest extends KernelTestCase
         $this->dmDefault->getDocumentCollection(Notification::class)->deleteMany([]);
         $this->dmWellness->getDocumentCollection(Notification::class)->deleteMany([]);
     }
-    
+
     protected function tearDown(): void
     {
         if ($this->dmDefault) {
@@ -40,7 +40,7 @@ class MigrateNotificationCommandTest extends KernelTestCase
         $notif1 = new Notification('u1', 'alert', 'T1', 'B1', 'diabetes');
         $this->dmDefault->persist($notif1);
         $this->dmDefault->flush();
-        
+
         // Create dummy data in wellness
         $notif2 = new Notification('u2', 'info', 'T2', 'B2', 'wellness');
         $this->dmWellness->persist($notif2);
@@ -55,7 +55,7 @@ class MigrateNotificationCommandTest extends KernelTestCase
 
         $commandTester->assertCommandIsSuccessful();
         $output = $commandTester->getDisplay();
-        
+
         $this->assertStringContainsString('Processing Manager: default', $output);
         $this->assertStringContainsString('Processing Manager: wellness', $output);
         $this->assertStringContainsString('Found 1 notifications', $output);
@@ -65,7 +65,7 @@ class MigrateNotificationCommandTest extends KernelTestCase
         $updated1 = $this->dmDefault->getRepository(Notification::class)->findOneBy(['userId' => 'u1']);
         $this->assertArrayHasKey('version', $updated1->getData());
         $this->assertSame(2, $updated1->getData()['version']);
-        
+
         $this->dmWellness->clear();
         $updated2 = $this->dmWellness->getRepository(Notification::class)->findOneBy(['userId' => 'u2']);
         $this->assertArrayHasKey('version', $updated2->getData());

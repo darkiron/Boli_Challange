@@ -14,7 +14,7 @@ class SendNotificationCommand
     /** @var bool */
     public $dryRun;
 
-    public function __construct($userId, $type, array $payload = array(), $dryRun = false)
+    public function __construct($userId, $type, array $payload = [], $dryRun = false)
     {
         $this->userId = $userId;
         $this->type = $type;

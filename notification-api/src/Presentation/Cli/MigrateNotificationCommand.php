@@ -39,7 +39,7 @@ class MigrateNotificationCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $isRollback = $input->getOption('rollback');
         $action = $isRollback ? 'Rollback' : 'Migration';
-        
+
         $io->title("Starting Notification $action");
 
         // List of managers as per requirements (multi-base)
@@ -47,52 +47,52 @@ class MigrateNotificationCommand extends Command
 
         foreach ($managers as $managerName) {
             $io->section("Processing Manager: $managerName");
-            
+
             try {
                 $dm = $this->registry->getManager($managerName);
             } catch (\Exception $e) {
                 $io->warning("Manager $managerName not found or accessible.");
                 continue;
             }
-            
+
             $repo = $dm->getRepository(Notification::class);
-            
+
             // We process all notifications to ensure consistency
             $total = $repo->countAll();
-            
-            if ($total === 0) {
+
+            if (0 === $total) {
                 $io->note("No notifications found in $managerName.");
                 continue;
             }
-            
+
             $io->text("Found $total notifications.");
             $progressBar = new ProgressBar($output, $total);
             $progressBar->start();
 
             $batchSize = 1000;
             $i = 0;
-            
+
             $iterator = $repo->iterateAll();
-            
+
             // Attempt to start a session for transactions if supported
             $session = null;
             try {
-                 $client = $dm->getClient();
-                 // startSession might fail on standalone servers
-                 $session = $client->startSession();
-                 $session->startTransaction();
+                $client = $dm->getClient();
+                // startSession might fail on standalone servers
+                $session = $client->startSession();
+                $session->startTransaction();
             } catch (\Throwable $e) {
                 $session = null; // Transactions not supported or failed
             }
 
             try {
                 foreach ($iterator as $notification) {
-                    $i++;
-                    
+                    ++$i;
+
                     $data = $notification->getData();
-                    
+
                     if ($isRollback) {
-                        if (isset($data['version']) && $data['version'] === 2) {
+                        if (isset($data['version']) && 2 === $data['version']) {
                             unset($data['version']);
                             $notification->setData($data);
                         }
@@ -102,7 +102,7 @@ class MigrateNotificationCommand extends Command
                             $notification->setData($data);
                         }
                     }
-                    
+
                     if (($i % $batchSize) === 0) {
                         $dm->flush();
                         if ($session) {
@@ -113,7 +113,7 @@ class MigrateNotificationCommand extends Command
                     }
                     $progressBar->advance();
                 }
-                
+
                 $dm->flush();
                 if ($session) {
                     $session->commitTransaction();
@@ -122,18 +122,19 @@ class MigrateNotificationCommand extends Command
                 $progressBar->finish();
                 $io->newLine();
                 $this->logger->info("$action finished for $managerName", ['count' => $total]);
-                
             } catch (\Exception $e) {
                 if ($session) {
                     $session->abortTransaction();
                 }
-                $io->error("Error during $action of $managerName: " . $e->getMessage());
+                $io->error("Error during $action of $managerName: ".$e->getMessage());
                 $this->logger->error("$action failed", ['manager' => $managerName, 'error' => $e->getMessage()]);
+
                 return Command::FAILURE;
             }
         }
 
         $io->success("All $action operations completed.");
+
         return Command::SUCCESS;
     }
 }

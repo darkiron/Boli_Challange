@@ -2,7 +2,7 @@
 
 // PHPUnit bootstrap: charge l'autoloader, prépare l'environnement de test et nettoie le cache Symfony
 
-$autoload = __DIR__ . '/../vendor/autoload.php';
+$autoload = __DIR__.'/../vendor/autoload.php';
 if (file_exists($autoload)) {
     require $autoload;
 }
@@ -25,7 +25,7 @@ $_SERVER['APP_DEBUG'] = $_ENV['APP_DEBUG'] = getenv('APP_DEBUG');
 $_SERVER['APP_VERSION'] = $_ENV['APP_VERSION'] = getenv('APP_VERSION');
 
 // Nettoyage du cache test pour éviter l'utilisation d'un conteneur compilé avec un ancien fallback
-$cacheDir = __DIR__ . '/../var/cache/test';
+$cacheDir = __DIR__.'/../var/cache/test';
 if (is_dir($cacheDir)) {
     $it = new RecursiveDirectoryIterator($cacheDir, RecursiveDirectoryIterator::SKIP_DOTS);
     $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);

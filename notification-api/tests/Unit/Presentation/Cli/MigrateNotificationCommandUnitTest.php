@@ -9,7 +9,6 @@ use NotificationApi\Infrastructure\Persistence\Doctrine\Repository\NotificationR
 use NotificationApi\Presentation\Cli\MigrateNotificationCommand;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class MigrateNotificationCommandUnitTest extends TestCase
@@ -21,7 +20,7 @@ class MigrateNotificationCommandUnitTest extends TestCase
         $dm = $this->createMock(DocumentManager::class);
         // Mock the specific repository class
         $repo = $this->createMock(NotificationRepository::class);
-        
+
         $registry->expects($this->any())
             ->method('getManager')
             ->willReturn($dm);
@@ -44,7 +43,7 @@ class MigrateNotificationCommandUnitTest extends TestCase
         $dm->expects($this->atLeastOnce())->method('clear');
 
         $command = new MigrateNotificationCommand($registry, $logger);
-        
+
         $tester = new CommandTester($command);
         $tester->execute([]);
 
@@ -58,7 +57,7 @@ class MigrateNotificationCommandUnitTest extends TestCase
         $logger = $this->createMock(LoggerInterface::class);
         $dm = $this->createMock(DocumentManager::class);
         $repo = $this->createMock(NotificationRepository::class);
-        
+
         $registry->expects($this->any())
             ->method('getManager')
             ->willReturn($dm);
@@ -73,13 +72,13 @@ class MigrateNotificationCommandUnitTest extends TestCase
 
         $notification = new Notification('u1', 'alert', 'T1', 'B1', 'diabetes');
         $notification->setData(['version' => 2]);
-        
+
         $repo->expects($this->any())
             ->method('iterateAll')
             ->willReturn(new \ArrayIterator([$notification]));
 
         $command = new MigrateNotificationCommand($registry, $logger);
-        
+
         $tester = new CommandTester($command);
         $tester->execute(['--rollback' => true]);
 
