@@ -4,17 +4,19 @@ namespace NotificationApi\Application\Command;
 
 class SendNotificationCommand
 {
-    /** @var string */
-    public $userId;
-    /** @var string */
-    public $type;
-    /** @var array */
-    public $payload;
+    public string $userId;
 
-    /** @var bool */
-    public $dryRun;
+    public string $type;
 
-    public function __construct($userId, $type, array $payload = [], $dryRun = false)
+    /** @var array<string, mixed> */
+    public array $payload;
+
+    public bool $dryRun;
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    public function __construct(string $userId, string $type, array $payload = [], bool $dryRun = false)
     {
         $this->userId = $userId;
         $this->type = $type;

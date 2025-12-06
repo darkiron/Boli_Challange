@@ -29,6 +29,9 @@ class NotificationService implements NotificationServiceInterface
         $this->rateLimit = $rateLimit;
     }
 
+    /**
+     * @param array<string, mixed> $payload
+     */
     public function send(string $userId, string $type, array $payload = [], bool $dryRun = false): bool
     {
         if (!$this->checkRateLimit($userId)) {
