@@ -12,13 +12,14 @@ class SendNotificationHandler
 {
     public function __construct(
         private NotificationServiceInterface $notificationService,
-        private LoggerInterface $logger
-    ) {}
+        private LoggerInterface $logger,
+    ) {
+    }
 
     public function __invoke(SendNotificationMessage $message): void
     {
         $this->logger->info("Handling SendNotificationMessage for user {$message->userId}");
-        
+
         $payload = array_merge(
             ['title' => $message->title, 'body' => $message->body, 'serviceName' => $message->serviceName],
             $message->data
@@ -30,7 +31,7 @@ class SendNotificationHandler
             $this->logger->warning("Failed to send notification to {$message->userId}. Retrying...");
             throw new \Exception("Failed to send notification to {$message->userId}");
         }
-        
+
         $this->logger->info("Notification sent successfully to {$message->userId}");
     }
 }

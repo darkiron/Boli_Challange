@@ -19,18 +19,18 @@ class NotificationStatusUpdateHandlerTest extends TestCase
         $dm = $this->createMock(DocumentManager::class);
         $repo = $this->createMock(DocumentRepository::class);
         $logger = $this->createMock(LoggerInterface::class);
-        
+
         $registry->expects($this->once())->method('getManagers')->willReturn(['default' => $dm]);
         $dm->expects($this->once())->method('getRepository')->willReturn($repo);
-        
+
         $notification = new Notification('u1', 't', 'title', 'body', 'svc');
         $repo->expects($this->once())->method('find')->with('123')->willReturn($notification);
-        
+
         $dm->expects($this->once())->method('flush');
-        
+
         $handler = new NotificationStatusUpdateHandler($registry, $logger);
         $handler(new NotificationStatusUpdateMessage('123', 'sent'));
-        
+
         $this->assertEquals('sent', $notification->getStatus());
     }
 
@@ -40,15 +40,15 @@ class NotificationStatusUpdateHandlerTest extends TestCase
         $dm = $this->createMock(DocumentManager::class);
         $repo = $this->createMock(DocumentRepository::class);
         $logger = $this->createMock(LoggerInterface::class);
-        
+
         $registry->expects($this->once())->method('getManagers')->willReturn(['default' => $dm]);
         $dm->expects($this->once())->method('getRepository')->willReturn($repo);
-        
+
         $repo->expects($this->once())->method('find')->willReturn(null);
-        
+
         $dm->expects($this->never())->method('flush');
         $logger->expects($this->once())->method('warning');
-        
+
         $handler = new NotificationStatusUpdateHandler($registry, $logger);
         $handler(new NotificationStatusUpdateMessage('123', 'sent'));
     }

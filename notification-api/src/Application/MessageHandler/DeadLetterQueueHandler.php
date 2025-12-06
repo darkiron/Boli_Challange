@@ -12,8 +12,9 @@ class DeadLetterQueueHandler
 {
     public function __construct(
         private NotificationServiceInterface $notificationService,
-        private LoggerInterface $logger
-    ) {}
+        private LoggerInterface $logger,
+    ) {
+    }
 
     public function __invoke(SendNotificationMessage $message): void
     {
@@ -29,6 +30,7 @@ class DeadLetterQueueHandler
 
         if ($success) {
             $this->logger->info("Successfully recovered message for {$message->userId} from DLQ.");
+
             return;
         }
 
@@ -39,6 +41,6 @@ class DeadLetterQueueHandler
     private function archiveMessage(SendNotificationMessage $message): void
     {
         // In a real app, save to DB. Here, we log as critical archive.
-        $this->logger->critical("ARCHIVING PERMANENTLY FAILED MESSAGE: " . json_encode($message));
+        $this->logger->critical('ARCHIVING PERMANENTLY FAILED MESSAGE: '.json_encode($message));
     }
 }

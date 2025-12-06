@@ -8,6 +8,7 @@ class BulkNotificationMessage
      * @param SendNotificationMessage[] $notifications
      */
     public function __construct(
-        public readonly array $notifications
-    ) {}
+        public readonly array $notifications,
+    ) {
+    }
 }

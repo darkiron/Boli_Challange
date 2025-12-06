@@ -6,6 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/notification-api/tests" isTestSource="true" packagePrefix="NotificationApi\Tests\" />
       <sourceFolder url="file://$MODULE_DIR$/notification-api/tests/Functional" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/notification-api/tests/Unit" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/clue/ndjson-react" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/doctrine/cache" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/doctrine/collections" />
@@ -15,6 +16,9 @@
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/doctrine/mongodb-odm" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/doctrine/mongodb-odm-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/doctrine/persistence" />
+      <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/evenement/evenement" />
+      <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/fidry/cpu-core-counter" />
+      <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/friendsofphp/php-cs-fixer" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/friendsofphp/proxy-manager-lts" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/jean85/pretty-package-versions" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/laminas/laminas-code" />
@@ -28,6 +32,7 @@
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/phpdocumentor/reflection-docblock" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/phpdocumentor/type-resolver" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/phpstan/phpdoc-parser" />
+      <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/phpstan/phpstan" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/phpunit/php-code-coverage" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/phpunit/php-file-iterator" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/phpunit/php-invoker" />
@@ -39,6 +44,13 @@
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/psr/container" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/psr/event-dispatcher" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/psr/log" />
+      <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/react/cache" />
+      <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/react/child-process" />
+      <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/react/dns" />
+      <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/react/event-loop" />
+      <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/react/promise" />
+      <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/react/socket" />
+      <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/react/stream" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/sebastian/cli-parser" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/sebastian/code-unit" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/sebastian/code-unit-reverse-lookup" />
@@ -82,10 +94,13 @@
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/symfony/polyfill-intl-grapheme" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/symfony/polyfill-intl-normalizer" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/symfony/polyfill-mbstring" />
+      <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/symfony/polyfill-php80" />
+      <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/symfony/polyfill-php81" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/symfony/polyfill-php83" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/symfony/polyfill-php84" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/symfony/polyfill-php85" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/symfony/polyfill-uuid" />
+      <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/symfony/process" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/symfony/property-access" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/symfony/property-info" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/symfony/routing" />
@@ -93,6 +108,7 @@
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/symfony/serializer" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/symfony/serializer-pack" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/symfony/service-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/symfony/stopwatch" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/symfony/string" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/symfony/type-info" />
       <excludeFolder url="file://$MODULE_DIR$/notification-api/vendor/symfony/uid" />

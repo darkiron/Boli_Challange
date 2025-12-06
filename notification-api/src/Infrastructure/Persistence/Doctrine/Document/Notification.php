@@ -50,7 +50,7 @@ class Notification
         string $title,
         string $body,
         string $serviceName,
-        array $data = []
+        array $data = [],
     ) {
         $this->userId = $userId;
         $this->type = $type;
@@ -94,6 +94,7 @@ class Notification
     public function setData(array $data): self
     {
         $this->data = $data;
+
         return $this;
     }
 
@@ -105,6 +106,7 @@ class Notification
     public function setStatus(string $status): self
     {
         $this->status = $status;
+
         return $this;
     }
 
@@ -116,6 +118,7 @@ class Notification
     public function setSentAt(?\DateTimeInterface $sentAt): self
     {
         $this->sentAt = $sentAt;
+
         return $this;
     }
 
@@ -137,6 +140,7 @@ class Notification
     public function setReadAt(?\DateTimeInterface $readAt): self
     {
         $this->readAt = $readAt;
+
         return $this;
     }
 }

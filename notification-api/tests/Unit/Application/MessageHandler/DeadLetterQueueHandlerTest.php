@@ -15,12 +15,12 @@ class DeadLetterQueueHandlerTest extends TestCase
         $service = $this->createMock(NotificationServiceInterface::class);
         $logger = $this->createMock(LoggerInterface::class);
         $handler = new DeadLetterQueueHandler($service, $logger);
-        
+
         $message = new SendNotificationMessage('u1', 'a', 't', 'b', [], 's');
-        
+
         $service->expects($this->once())->method('send')->willReturn(true);
         $logger->expects($this->never())->method('critical'); // No archive
-        
+
         $handler($message);
     }
 
@@ -29,12 +29,12 @@ class DeadLetterQueueHandlerTest extends TestCase
         $service = $this->createMock(NotificationServiceInterface::class);
         $logger = $this->createMock(LoggerInterface::class);
         $handler = new DeadLetterQueueHandler($service, $logger);
-        
+
         $message = new SendNotificationMessage('u1', 'a', 't', 'b', [], 's');
-        
+
         $service->expects($this->once())->method('send')->willReturn(false);
         $logger->expects($this->once())->method('critical'); // Archived
-        
+
         $handler($message);
     }
 }
