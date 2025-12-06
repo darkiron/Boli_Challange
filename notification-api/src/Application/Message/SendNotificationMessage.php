@@ -4,6 +4,9 @@ namespace NotificationApi\Application\Message;
 
 class SendNotificationMessage
 {
+    /**
+     * @param array<string, mixed> $data
+     */
     public function __construct(
         public readonly string $userId,
         public readonly string $type,

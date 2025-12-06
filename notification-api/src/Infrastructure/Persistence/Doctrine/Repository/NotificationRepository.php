@@ -6,6 +6,11 @@ use Doctrine\Bundle\MongoDBBundle\ManagerRegistry;
 use Doctrine\Bundle\MongoDBBundle\Repository\ServiceDocumentRepository;
 use NotificationApi\Infrastructure\Persistence\Doctrine\Document\Notification;
 
+use Doctrine\ODM\MongoDB\Iterator\Iterator;
+
+/**
+ * @extends ServiceDocumentRepository<Notification>
+ */
 class NotificationRepository extends ServiceDocumentRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -13,9 +18,12 @@ class NotificationRepository extends ServiceDocumentRepository
         parent::__construct($registry, Notification::class);
     }
 
+    /**
+     * @return Notification[]
+     */
     public function findUnreadByUser(string $userId, string $serviceName, int $limit = 20): array
     {
-        return $this->createQueryBuilder()
+        $result = $this->createQueryBuilder()
             ->field('userId')->equals($userId)
             ->field('serviceName')->equals($serviceName)
             ->field('readAt')->equals(null)
@@ -23,8 +31,13 @@ class NotificationRepository extends ServiceDocumentRepository
             ->limit($limit)
             ->select(['id', 'type', 'title', 'body', 'createdAt', 'status'])
             ->getQuery()
-            ->execute()
-            ->toArray();
+            ->execute();
+
+        if ($result instanceof Iterator) {
+             return $result->toArray();
+        }
+
+        return is_array($result) ? $result : [];
     }
 
     public function countByStatusAndService(string $status, string $serviceName, \DateTime $startDate, \DateTime $endDate): int
@@ -40,9 +53,18 @@ class NotificationRepository extends ServiceDocumentRepository
 
         $result = $builder->getAggregation()->getIterator()->current();
 
-        return $result['count'] ?? 0;
+        return is_array($result) ? ($result['count'] ?? 0) : 0;
     }
 
+    /**
+     * @return array{
+     *     total: int,
+     *     byType: array<string, int>,
+     *     byStatus: array<string, int>,
+     *     successRate: float,
+     *     avgProcessingTime: int|float
+     * }
+     */
     public function getStatisticsByService(string $serviceName, \DateTime $startDate, \DateTime $endDate): array
     {
         $builder = $this->createAggregationBuilder();
@@ -81,7 +103,7 @@ class NotificationRepository extends ServiceDocumentRepository
                 'total' => 0,
                 'byType' => ['alert' => 0, 'reminder' => 0, 'info' => 0],
                 'byStatus' => ['pending' => 0, 'sent' => 0, 'failed' => 0],
-                'successRate' => 0,
+                'successRate' => 0.0,
                 'avgProcessingTime' => 0,
             ];
         }
@@ -91,42 +113,55 @@ class NotificationRepository extends ServiceDocumentRepository
         $successRate = $total > 0 ? ($sent / $total) * 100 : 0;
 
         return [
-            'total' => $total,
+            'total' => (int) $total,
             'byType' => [
-                'alert' => $result['alertCount'],
-                'reminder' => $result['reminderCount'],
-                'info' => $result['infoCount'],
+                'alert' => (int) $result['alertCount'],
+                'reminder' => (int) $result['reminderCount'],
+                'info' => (int) $result['infoCount'],
             ],
             'byStatus' => [
-                'pending' => $result['pending'],
-                'sent' => $result['sent'],
-                'failed' => $result['failed'],
+                'pending' => (int) $result['pending'],
+                'sent' => (int) $result['sent'],
+                'failed' => (int) $result['failed'],
             ],
-            'successRate' => round($successRate, 2),
+            'successRate' => round((float) $successRate, 2),
             'avgProcessingTime' => $result['avgProcessingTime'],
         ];
     }
 
+    /**
+     * @return Notification[]
+     */
     public function findFailedNotificationsOlderThan(int $hours): array
     {
         $date = new \DateTime();
         $date->modify("-{$hours} hours");
 
-        return $this->createQueryBuilder()
+        $result = $this->createQueryBuilder()
             ->field('status')->equals('failed')
             ->field('createdAt')->lte($date)
             ->getQuery()
-            ->execute()
-            ->toArray();
+            ->execute();
+
+        if ($result instanceof Iterator) {
+             return $result->toArray();
+        }
+
+        return is_array($result) ? $result : [];
     }
 
     public function countAll(): int
     {
-        return $this->createQueryBuilder()->count()->getQuery()->execute();
+        $count = $this->createQueryBuilder()->count()->getQuery()->execute();
+        return is_numeric($count) ? (int) $count : 0;
     }
 
     public function iterateAll(): \Iterator
     {
-        return $this->createQueryBuilder()->getQuery()->getIterator();
+        $iterator = $this->createQueryBuilder()->getQuery()->getIterator();
+        if (!$iterator instanceof \Iterator) {
+            return new \ArrayIterator([]);
+        }
+        return $iterator;
     }
 }

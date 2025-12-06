@@ -1,0 +1,337 @@
+
+[+] Creating 2/2
+ ✔ Container mongodb   Running                                             0.0s
+ ✔ Container rabbitmq  Running                                             0.0s
+Note: Using configuration file /var/www/html/phpstan.neon.
+ 32/32 [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 100%
+ ------ -----------------------------------------------------------------------
+  Line   src/Infrastructure/Persistence/Doctrine/Document/Notification.php
+ ------ -----------------------------------------------------------------------
+  15     Property
+         NotificationApi\Infrastructure\Persistence\Doctrine\Document\Notifica
+         tion::$id (string|null) is never assigned string so it can be removed
+         from the property type.
+         🪪  property.unusedType
+ ------ -----------------------------------------------------------------------
+ ------ -----------------------------------------------------------------------
+  Line   src/Infrastructure/Persistence/Doctrine/Repository/NotificationReposi
+         tory.php
+ ------ -----------------------------------------------------------------------
+  162    Instanceof between Doctrine\ODM\MongoDB\Iterator\Iterator and
+         Iterator will always evaluate to true.
+         🪪  instanceof.alwaysTrue
+ ------ -----------------------------------------------------------------------
+ ------ -----------------------------------------------------
+  Line   src/Presentation/Cli/MigrateNotificationCommand.php
+ ------ -----------------------------------------------------
+  131    If condition is always true.
+         🪪  if.alwaysTrue
+ ------ -----------------------------------------------------
+ ------ -----------------------------------------------------------------------
+  Line   tests/Functional/Infrastructure/Persistence/Doctrine/Repository/Notif
+         icationRepositoryTest.php
+ ------ -----------------------------------------------------------------------
+  12     Property
+         NotificationApi\Tests\Functional\Infrastructure\Persistence\Doctrine\
+         Repository\NotificationRepositoryTest::$dm
+         (Doctrine\ODM\MongoDB\DocumentManager|null) is never assigned null so
+         it can be removed from the property type.
+         🪪  property.unusedType
+  13     Property
+         NotificationApi\Tests\Functional\Infrastructure\Persistence\Doctrine\
+         Repository\NotificationRepositoryTest::$repository
+         (NotificationApi\Infrastructure\Persistence\Doctrine\Repository\Notif
+         icationRepository|null) is never assigned null so it can be removed
+         from the property type.
+         🪪  property.unusedType
+  18     Property
+         NotificationApi\Tests\Functional\Infrastructure\Persistence\Doctrine\
+         Repository\NotificationRepositoryTest::$dm
+         (Doctrine\ODM\MongoDB\DocumentManager|null) does not accept object.
+         🪪  assign.propertyType
+  19     Cannot call method getRepository() on
+         Doctrine\ODM\MongoDB\DocumentManager|null.
+         🪪  method.nonObject
+  19     Property
+         NotificationApi\Tests\Functional\Infrastructure\Persistence\Doctrine\
+         Repository\NotificationRepositoryTest::$repository
+         (NotificationApi\Infrastructure\Persistence\Doctrine\Repository\Notif
+         icationRepository|null) does not accept
+         Doctrine\ODM\MongoDB\Repository\DocumentRepository<NotificationApi\In
+         frastructure\Persistence\Doctrine\Document\Notification>|Doctrine\ODM
+         \MongoDB\Repository\GridFSRepository<NotificationApi\Infrastructure\P
+         ersistence\Doctrine\Document\Notification>|Doctrine\ODM\MongoDB\Repos
+         itory\ViewRepository<NotificationApi\Infrastructure\Persistence\Doctr
+         ine\Document\Notification>.
+         🪪  assign.propertyType
+  22     Cannot call method getDocumentCollection() on
+         Doctrine\ODM\MongoDB\DocumentManager|null.
+         🪪  method.nonObject
+  41     Cannot call method persist() on
+         Doctrine\ODM\MongoDB\DocumentManager|null.
+         🪪  method.nonObject
+  42     Cannot call method persist() on
+         Doctrine\ODM\MongoDB\DocumentManager|null.
+         🪪  method.nonObject
+  43     Cannot call method persist() on
+         Doctrine\ODM\MongoDB\DocumentManager|null.
+         🪪  method.nonObject
+  44     Cannot call method flush() on
+         Doctrine\ODM\MongoDB\DocumentManager|null.
+         🪪  method.nonObject
+  46     Cannot call method findUnreadByUser() on
+         NotificationApi\Infrastructure\Persistence\Doctrine\Repository\Notifi
+         cationRepository|null.
+         🪪  method.nonObject
+  63     Cannot call method persist() on
+         Doctrine\ODM\MongoDB\DocumentManager|null.
+         🪪  method.nonObject
+  64     Cannot call method persist() on
+         Doctrine\ODM\MongoDB\DocumentManager|null.
+         🪪  method.nonObject
+  65     Cannot call method persist() on
+         Doctrine\ODM\MongoDB\DocumentManager|null.
+         🪪  method.nonObject
+  66     Cannot call method flush() on
+         Doctrine\ODM\MongoDB\DocumentManager|null.
+         🪪  method.nonObject
+  68     Cannot call method countByStatusAndService() on
+         NotificationApi\Infrastructure\Persistence\Doctrine\Repository\Notifi
+         cationRepository|null.
+         🪪  method.nonObject
+  97     Cannot call method persist() on
+         Doctrine\ODM\MongoDB\DocumentManager|null.
+         🪪  method.nonObject
+  98     Cannot call method persist() on
+         Doctrine\ODM\MongoDB\DocumentManager|null.
+         🪪  method.nonObject
+  99     Cannot call method persist() on
+         Doctrine\ODM\MongoDB\DocumentManager|null.
+         🪪  method.nonObject
+  100    Cannot call method flush() on
+         Doctrine\ODM\MongoDB\DocumentManager|null.
+         🪪  method.nonObject
+  102    Cannot call method getStatisticsByService() on
+         NotificationApi\Infrastructure\Persistence\Doctrine\Repository\Notifi
+         cationRepository|null.
+         🪪  method.nonObject
+  126    Cannot call method persist() on
+         Doctrine\ODM\MongoDB\DocumentManager|null.
+         🪪  method.nonObject
+  127    Cannot call method persist() on
+         Doctrine\ODM\MongoDB\DocumentManager|null.
+         🪪  method.nonObject
+  128    Cannot call method flush() on
+         Doctrine\ODM\MongoDB\DocumentManager|null.
+         🪪  method.nonObject
+  130    Cannot call method findFailedNotificationsOlderThan() on
+         NotificationApi\Infrastructure\Persistence\Doctrine\Repository\Notifi
+         cationRepository|null.
+         🪪  method.nonObject
+ ------ -----------------------------------------------------------------------
+ ------ -----------------------------------------------------------------------
+  Line   tests/Functional/KernelBootTest.php
+ ------ -----------------------------------------------------------------------
+  11     Method
+         NotificationApi\Tests\Functional\KernelBootTest::testKernelBootsAndHe
+         althControllerIsCallable() has no return type specified.
+         🪪  missingType.return
+  21     Call to an undefined method object::generate().
+         🪪  method.notFound
+  25     Call to method PHPUnit\Framework\Assert::assertIsObject() with object
+         will always evaluate to true.
+         🪪  method.alreadyNarrowedType
+         💡  Because the type is coming from a PHPDoc, you can turn off this
+         check by setting treatPhpDocTypesAsCertain: false in your phpstan.neo
+         n.
+  27     Call to an undefined method object::index().
+         🪪  method.notFound
+  31     Parameter #1 $json of function json_decode expects string,
+         string|false given.
+         🪪  argument.type
+ ------ -----------------------------------------------------------------------
+ ------ -----------------------------------------------------------------------
+  Line   tests/Functional/Presentation/Cli/MigrateNotificationCommandTest.php
+ ------ -----------------------------------------------------------------------
+  13     Property
+         NotificationApi\Tests\Functional\Presentation\Cli\MigrateNotification
+         CommandTest::$dmDefault (Doctrine\ODM\MongoDB\DocumentManager|null)
+         is never assigned null so it can be removed from the property type.
+         🪪  property.unusedType
+  14     Property
+         NotificationApi\Tests\Functional\Presentation\Cli\MigrateNotification
+         CommandTest::$dmWellness (Doctrine\ODM\MongoDB\DocumentManager|null)
+         is never assigned null so it can be removed from the property type.
+         🪪  property.unusedType
+  19     Property
+         NotificationApi\Tests\Functional\Presentation\Cli\MigrateNotification
+         CommandTest::$dmDefault (Doctrine\ODM\MongoDB\DocumentManager|null)
+         does not accept object.
+         🪪  assign.propertyType
+  20     Property
+         NotificationApi\Tests\Functional\Presentation\Cli\MigrateNotification
+         CommandTest::$dmWellness (Doctrine\ODM\MongoDB\DocumentManager|null)
+         does not accept object.
+         🪪  assign.propertyType
+  22     Cannot call method getDocumentCollection() on
+         Doctrine\ODM\MongoDB\DocumentManager|null.
+         🪪  method.nonObject
+  23     Cannot call method getDocumentCollection() on
+         Doctrine\ODM\MongoDB\DocumentManager|null.
+         🪪  method.nonObject
+  41     Cannot call method persist() on
+         Doctrine\ODM\MongoDB\DocumentManager|null.
+         🪪  method.nonObject
+  42     Cannot call method flush() on
+         Doctrine\ODM\MongoDB\DocumentManager|null.
+         🪪  method.nonObject
+  46     Cannot call method persist() on
+         Doctrine\ODM\MongoDB\DocumentManager|null.
+         🪪  method.nonObject
+  47     Cannot call method flush() on
+         Doctrine\ODM\MongoDB\DocumentManager|null.
+         🪪  method.nonObject
+  64     Cannot call method clear() on
+         Doctrine\ODM\MongoDB\DocumentManager|null.
+         🪪  method.nonObject
+  65     Cannot call method getRepository() on
+         Doctrine\ODM\MongoDB\DocumentManager|null.
+         🪪  method.nonObject
+  66     Cannot call method getData() on
+         NotificationApi\Infrastructure\Persistence\Doctrine\Document\Notifica
+         tion|null.
+         🪪  method.nonObject
+  67     Cannot call method getData() on
+         NotificationApi\Infrastructure\Persistence\Doctrine\Document\Notifica
+         tion|null.
+         🪪  method.nonObject
+  69     Cannot call method clear() on
+         Doctrine\ODM\MongoDB\DocumentManager|null.
+         🪪  method.nonObject
+  70     Cannot call method getRepository() on
+         Doctrine\ODM\MongoDB\DocumentManager|null.
+         🪪  method.nonObject
+  71     Cannot call method getData() on
+         NotificationApi\Infrastructure\Persistence\Doctrine\Document\Notifica
+         tion|null.
+         🪪  method.nonObject
+  72     Cannot call method getData() on
+         NotificationApi\Infrastructure\Persistence\Doctrine\Document\Notifica
+         tion|null.
+         🪪  method.nonObject
+ ------ -----------------------------------------------------------------------
+ ------ -----------------------------------------------------------------------
+  Line   tests/Unit/Application/MessageHandler/BulkNotificationHandlerTest.php
+ ------ -----------------------------------------------------------------------
+  15     Method
+         NotificationApi\Tests\Unit\Application\MessageHandler\BulkNotificatio
+         nHandlerTest::testHandle() has no return type specified.
+         🪪  missingType.return
+ ------ -----------------------------------------------------------------------
+ ------ -----------------------------------------------------------------------
+  Line   tests/Unit/Application/MessageHandler/DeadLetterQueueHandlerTest.php
+ ------ -----------------------------------------------------------------------
+  13     Method
+         NotificationApi\Tests\Unit\Application\MessageHandler\DeadLetterQueue
+         HandlerTest::testHandleRetrySuccess() has no return type specified.
+         🪪  missingType.return
+  27     Method
+         NotificationApi\Tests\Unit\Application\MessageHandler\DeadLetterQueue
+         HandlerTest::testHandleRetryFailureArchive() has no return type
+         specified.
+         🪪  missingType.return
+ ------ -----------------------------------------------------------------------
+ ------ -----------------------------------------------------------------------
+  Line   tests/Unit/Application/MessageHandler/NotificationStatusUpdateHandler
+         Test.php
+ ------ -----------------------------------------------------------------------
+  16     Method
+         NotificationApi\Tests\Unit\Application\MessageHandler\NotificationSta
+         tusUpdateHandlerTest::testHandleFound() has no return type specified.
+         🪪  missingType.return
+  37     Method
+         NotificationApi\Tests\Unit\Application\MessageHandler\NotificationSta
+         tusUpdateHandlerTest::testHandleNotFound() has no return type
+         specified.
+         🪪  missingType.return
+ ------ -----------------------------------------------------------------------
+ ------ -----------------------------------------------------------------------
+  Line   tests/Unit/Application/MessageHandler/SendNotificationHandlerTest.php
+ ------ -----------------------------------------------------------------------
+  13     Method
+         NotificationApi\Tests\Unit\Application\MessageHandler\SendNotificatio
+         nHandlerTest::testHandleSuccess() has no return type specified.
+         🪪  missingType.return
+  29     Method
+         NotificationApi\Tests\Unit\Application\MessageHandler\SendNotificatio
+         nHandlerTest::testHandleFailure() has no return type specified.
+         🪪  missingType.return
+ ------ -----------------------------------------------------------------------
+ ------ -----------------------------------------------------------------------
+  Line   tests/Unit/Infrastructure/Notification/NotificationServiceTest.php
+ ------ -----------------------------------------------------------------------
+  15     Property
+         NotificationApi\Tests\Unit\Infrastructure\Notification\NotificationSe
+         rviceTest::$httpClient has no type specified.
+         🪪  missingType.property
+  16     Property
+         NotificationApi\Tests\Unit\Infrastructure\Notification\NotificationSe
+         rviceTest::$cache has no type specified.
+         🪪  missingType.property
+  17     Property
+         NotificationApi\Tests\Unit\Infrastructure\Notification\NotificationSe
+         rviceTest::$logger has no type specified.
+         🪪  missingType.property
+  85     Method
+         NotificationApi\Tests\Unit\Infrastructure\Notification\NotificationSe
+         rviceTest::setupCacheMock() has parameter $currentCount with no type
+         specified.
+         🪪  missingType.parameter
+  85     Method
+         NotificationApi\Tests\Unit\Infrastructure\Notification\NotificationSe
+         rviceTest::setupCacheMock() has parameter $isHit with no type
+         specified.
+         🪪  missingType.parameter
+  85     Method
+         NotificationApi\Tests\Unit\Infrastructure\Notification\NotificationSe
+         rviceTest::setupCacheMock() has parameter $userId with no type
+         specified.
+         🪪  missingType.parameter
+ ------ -----------------------------------------------------------------------
+ ------ -----------------------------------------------------------------------
+  Line   tests/Unit/Infrastructure/Persistence/Doctrine/Document/NotificationT
+         est.php
+ ------ -----------------------------------------------------------------------
+  10     Method
+         NotificationApi\Tests\Unit\Infrastructure\Persistence\Doctrine\Docume
+         nt\NotificationTest::testNotificationCreationAndAccessors() has no
+         return type specified.
+         🪪  missingType.return
+ ------ -----------------------------------------------------------------------
+ ------ -----------------------------------------------------------------------
+  Line   tests/Unit/Presentation/Cli/MigrateNotificationCommandUnitTest.php
+ ------ -----------------------------------------------------------------------
+  16     Method
+         NotificationApi\Tests\Unit\Presentation\Cli\MigrateNotificationComman
+         dUnitTest::testExecuteMigration() has no return type specified.
+         🪪  missingType.return
+  54     Method
+         NotificationApi\Tests\Unit\Presentation\Cli\MigrateNotificationComman
+         dUnitTest::testExecuteRollback() has no return type specified.
+         🪪  missingType.return
+ ------ -----------------------------------------------------------------------
+ ------ ------------------------------------------------------------
+  Line   tests/Unit/Presentation/Http/HealthControllerTest.php
+ ------ ------------------------------------------------------------
+  18     Parameter #1 $json of function json_decode expects string,
+         string|false given.
+         🪪  argument.type
+ ------ ------------------------------------------------------------
+ -- --------------------------------------------------------------------
+     Error
+ -- --------------------------------------------------------------------
+     Ignored error pattern #Service ".*" is private# was not matched in
+     reported errors.
+ -- --------------------------------------------------------------------
+
+ [ERROR] Found 69 errors
